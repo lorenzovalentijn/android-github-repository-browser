@@ -1,11 +1,15 @@
 package com.lorenzovalentijn.github.repository.browser.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -15,31 +19,53 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.flowWithLifecycle
+import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.lorenzovalentijn.github.repository.browser.R
+import com.lorenzovalentijn.github.repository.domain.models.RepositoryModel
 import com.lorenzovalentijn.github.repository.presentation.DataState
+import com.lorenzovalentijn.github.repository.presentation.viewmodels.RepositoryListViewModel
+import org.koin.androidx.compose.getViewModel
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun RepositoryListScreen(
+    viewModel: RepositoryListViewModel = getViewModel(),
     navigate: () -> Unit = {},
 ) {
-    val state = DataState<List<String>>(isLoading = false, isEmpty = false, data = listOf("1", "2", "3", "4"), error = "Error occured")
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifeCycleAwareStateFlow = remember(viewModel.state, lifecycleOwner) {
+        viewModel.state.flowWithLifecycle(lifecycleOwner.lifecycle)
+    }
+    val state by lifeCycleAwareStateFlow.collectAsState(initial = viewModel.state.value)
+
     RepositoryListScreenContent(
         state = state,
         navigate = { navigate() },
-        onRefresh = {}
+        onRefresh = { viewModel.refresh() }
     )
 }
 
 @Composable
 fun RepositoryListScreenContent(
-    state: DataState<List<String>>,
+    state: DataState<List<RepositoryModel>>,
     navigate: () -> Unit = {},
     onRefresh: () -> Unit = {},
 ) {
@@ -59,20 +85,53 @@ fun RepositoryListScreenContent(
                 }
                 state.data?.let { data ->
                     LazyColumn {
-                        items(data) {
-                            Row(
-                                Modifier
-                                    .fillMaxSize()
-                                    .clickable { navigate() }
-                                    .padding(10.dp)
-                            ) {
-                                Text("Item $it")
-                            }
+                        items(data) { repositoryModel ->
+                            RepositoryRow(
+                                repositoryModel = repositoryModel,
+                                navigate = { navigate() }
+                            )
                             Divider()
                         }
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun RepositoryRow(
+    repositoryModel: RepositoryModel,
+    navigate: () -> Unit = {},
+    ) {
+    Row(
+        Modifier
+            .fillMaxSize()
+            .clickable { navigate() }
+            .padding(10.dp)
+    ) {
+        Box {
+            AsyncImage(
+                // model = rememberAsyncImagePainter(model = repositoryModel.ownerAvatarUrl),
+                model = repositoryModel.ownerAvatarUrl,
+                contentDescription = "Owner's avatar image",
+                modifier = Modifier
+                    .size(64.dp)
+                    .padding(10.dp),
+                error = rememberVectorPainter(image = Icons.Filled.Person),
+            )
+        }
+        Spacer(modifier = Modifier.size(10.dp))
+        Column {
+            Text("Name")
+            Text("Visibility")
+            Text("Private")
+        }
+        Spacer(modifier = Modifier.size(10.dp))
+        Column {
+            Text(repositoryModel.name)
+            Text(repositoryModel.visibility)
+            Text(repositoryModel.isPrivate.toString())
         }
     }
 }
@@ -105,6 +164,38 @@ fun ErrorText(error: String) {
 
 @Preview
 @Composable
-fun RepositoryListScreenContentPreview() {
-    RepositoryListScreenContent(DataState<List<String>>(isLoading = true, isEmpty = true, data = listOf("1", "2", "3", "4")))
+fun RepositoryListScreenContentPreview_Loading() {
+    RepositoryListScreenContent(DataState(isLoading = true))
+}
+
+@Preview
+@Composable
+fun RepositoryListScreenContentPreview_Empty() {
+    RepositoryListScreenContent(DataState(isEmpty = true))
+}
+
+@Preview
+@Composable
+fun RepositoryListScreenContentPreview_Error() {
+    RepositoryListScreenContent(DataState(error = "Data couldn't be loaded."))
+}
+
+@Preview
+@Composable
+fun RepositoryListScreenContentPreview_Success() {
+    RepositoryListScreenContent(
+        DataState(
+            data = listOf(
+                RepositoryModel(
+                    "Repo Lorenzo",
+                    "https://avatars.githubusercontent.com/u/11546716?v=4",
+                    "public",
+                    false
+                ),
+                RepositoryModel("Repo 2", "", "public", true),
+                RepositoryModel("Repo 3", "", "public", true),
+                RepositoryModel("Repo 4", "", "public", true),
+            )
+        )
+    )
 }

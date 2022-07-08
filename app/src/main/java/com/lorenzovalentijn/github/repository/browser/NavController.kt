@@ -8,6 +8,8 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -37,14 +39,23 @@ fun NavController() {
                     enterTransition = { slideInHorizontally() },
                     exitTransition = { exitTransition }
                 ) {
-                    RepositoryListScreen { navController.navigate(Screen.RepositoryDetailsScreen.name) }
+                    RepositoryListScreen { navController.navigate("${Screen.RepositoryDetailsScreen.name}/abnamrocoesd/airflow") }
                 }
                 composable(
-                    route = Screen.RepositoryDetailsScreen.name,
-                    popExitTransition = { slideOutHorizontally() },
+                    route = "${Screen.RepositoryDetailsScreen.name}/{user}/{repo}",
+                    arguments = listOf(
+                        navArgument("user") { type = NavType.StringType },
+                        navArgument("repo") { type = NavType.StringType }
+                    ),
                     enterTransition = { enterTransition },
+                    exitTransition = { slideOutHorizontally() },
                 ) {
-                    RepositoryDetailsScreen { navController.popBackStack() }
+                    RepositoryDetailsScreen(
+                        it.arguments?.getString("user"),
+                        it.arguments?.getString("repo")
+                    ) {
+                        navController.popBackStack()
+                    }
                 }
             }
         }
