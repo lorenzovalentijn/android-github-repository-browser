@@ -14,6 +14,7 @@ class GithubRepositoryMapper {
     private fun toRepositoryModel(model: GithubRepositoryModel): RepositoryModel {
         return RepositoryModel(
             name = model.name ?: "",
+            owner = model.owner?.login ?: "",
             ownerAvatarUrl = model.owner?.avatarUrl ?: "",
             visibility = model.visibility ?: "",
             isPrivate = model.isPrivate ?: true,
@@ -23,6 +24,7 @@ class GithubRepositoryMapper {
     fun toRepositoryDetailModel(model: GithubRepositoryModel): RepositoryDetailModel {
         return RepositoryDetailModel(
             name = model.name ?: "",
+            owner = model.owner?.login ?: "",
             fullName = model.fullName ?: "",
             description = model.description ?: "",
             ownerAvatarUrl = model.owner?.avatarUrl ?: "",

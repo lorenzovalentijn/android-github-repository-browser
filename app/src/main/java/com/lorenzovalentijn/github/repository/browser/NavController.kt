@@ -39,7 +39,9 @@ fun NavController() {
                     enterTransition = { slideInHorizontally() },
                     exitTransition = { exitTransition }
                 ) {
-                    RepositoryListScreen { navController.navigate("${Screen.RepositoryDetailsScreen.name}/abnamrocoesd/airflow") }
+                    RepositoryListScreen { user: String, repo: String ->
+                        navController.navigate("${Screen.RepositoryDetailsScreen.name}/$user/$repo")
+                    }
                 }
                 composable(
                     route = "${Screen.RepositoryDetailsScreen.name}/{user}/{repo}",

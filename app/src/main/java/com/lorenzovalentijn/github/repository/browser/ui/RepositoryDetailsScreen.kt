@@ -3,6 +3,7 @@ package com.lorenzovalentijn.github.repository.browser.ui
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -64,7 +66,9 @@ fun RepositoryDetailsScreen(
     }
     val state by lifeCycleAwareStateFlow.collectAsState(initial = viewModel.state.value)
 
-    // viewModel.refresh(user, repo)
+    LaunchedEffect(user, repo) {
+        viewModel.refresh(user, repo)
+    }
     RepositoryDetailsScreenContent(
         state = state,
         popBack = { popBack() },
@@ -156,6 +160,7 @@ fun RepositoryDetailsScreenContentPreview() {
         DataState(
             data = RepositoryDetailModel(
                 name = "airflow",
+                owner = "abnamrocoesd",
                 fullName = "abnamrocoesd/airflow",
                 description = "Apache Airflow - A platform to programmatically author, schedule, and monitor workflows",
                 ownerAvatarUrl = "https://avatars.githubusercontent.com/u/15876397?v=4",

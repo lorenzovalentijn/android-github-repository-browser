@@ -48,7 +48,7 @@ import org.koin.androidx.compose.getViewModel
 @Composable
 fun RepositoryListScreen(
     viewModel: RepositoryListViewModel = getViewModel(),
-    navigate: () -> Unit = {},
+    navigate: (user: String, repo: String) -> Unit = {_, _ -> },
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifeCycleAwareStateFlow = remember(viewModel.state, lifecycleOwner) {
@@ -58,7 +58,7 @@ fun RepositoryListScreen(
 
     RepositoryListScreenContent(
         state = state,
-        navigate = { navigate() },
+        navigate = navigate,
         onRefresh = { viewModel.refresh() }
     )
 }
@@ -66,7 +66,7 @@ fun RepositoryListScreen(
 @Composable
 fun RepositoryListScreenContent(
     state: DataState<List<RepositoryModel>>,
-    navigate: () -> Unit = {},
+    navigate: (user: String, repo: String) -> Unit = {_, _ -> },
     onRefresh: () -> Unit = {},
 ) {
     Scaffold(
@@ -88,7 +88,7 @@ fun RepositoryListScreenContent(
                         items(data) { repositoryModel ->
                             RepositoryRow(
                                 repositoryModel = repositoryModel,
-                                navigate = { navigate() }
+                                navigate = navigate
                             )
                             Divider()
                         }
@@ -102,12 +102,12 @@ fun RepositoryListScreenContent(
 @Composable
 fun RepositoryRow(
     repositoryModel: RepositoryModel,
-    navigate: () -> Unit = {},
+    navigate: (user: String, repo: String) -> Unit = {_, _ -> },
     ) {
     Row(
         Modifier
             .fillMaxSize()
-            .clickable { navigate() }
+            .clickable { navigate(repositoryModel.owner, repositoryModel.name) }
             .padding(10.dp)
     ) {
         Box {
@@ -188,13 +188,14 @@ fun RepositoryListScreenContentPreview_Success() {
             data = listOf(
                 RepositoryModel(
                     "Repo Lorenzo",
+                    "lorenzovalentijn",
                     "https://avatars.githubusercontent.com/u/11546716?v=4",
                     "public",
                     false
                 ),
-                RepositoryModel("Repo 2", "", "public", true),
-                RepositoryModel("Repo 3", "", "public", true),
-                RepositoryModel("Repo 4", "", "public", true),
+                RepositoryModel("Repo 2", "", "", "public", true),
+                RepositoryModel("Repo 3", "", "", "public", true),
+                RepositoryModel("Repo 4", "", "", "public", true),
             )
         )
     )

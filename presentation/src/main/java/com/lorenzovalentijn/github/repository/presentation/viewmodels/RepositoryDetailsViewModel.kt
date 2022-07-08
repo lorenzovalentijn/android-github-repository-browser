@@ -22,10 +22,6 @@ class RepositoryDetailsViewModel(
         )
     val state: StateFlow<DataState<RepositoryDetailModel>> = mutableState
 
-    init {
-        refresh("abnamrocoesd", "airflow")
-    }
-
     fun refresh(user: String?, repo: String?) {
         mutableState.update { it.copy(isLoading = true) }
 
