@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.lorenzovalentijn.github.repository.domain.models.RepositoryDetailModel
 import com.lorenzovalentijn.github.repository.domain.usecases.GetRepositoryDetailsUseCase
 import com.lorenzovalentijn.github.repository.presentation.DataState
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -18,12 +17,17 @@ class RepositoryDetailsViewModel(
     private val mutableState: MutableStateFlow<DataState<RepositoryDetailModel>> =
         MutableStateFlow(
             DataState(
-                isLoading = true,
+                isLoading = true
             )
         )
     val state: StateFlow<DataState<RepositoryDetailModel>> = mutableState
 
+    init {
+        refresh("abnamrocoesd", "airflow")
+    }
+
     fun refresh(user: String?, repo: String?) {
+        mutableState.update { it.copy(isLoading = true) }
 
         if (user == null || repo == null) {
             mutableState.update {
@@ -35,14 +39,22 @@ class RepositoryDetailsViewModel(
             return
         }
 
-        mutableState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            val repositoryDetails = getRepositoryDetailsUseCase.execute(user, repo)
-            mutableState.update {
-                it.copy(
-                    isLoading = false,
-                    data = repositoryDetails
-                )
+            val result = getRepositoryDetailsUseCase(user, repo)
+            result.onSuccess { model ->
+                mutableState.update {
+                    it.copy(
+                        isLoading = false,
+                        data = model
+                    )
+                }
+            }.onFailure { error ->
+                mutableState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = error.message
+                    )
+                }
             }
         }
     }

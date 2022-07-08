@@ -6,7 +6,6 @@ import com.lorenzovalentijn.github.repository.domain.repositories.GithubReposito
 class GetRepositoryListUseCase(
     private val githubRepository: GithubRepository
 ) {
-    suspend fun execute(): List<RepositoryModel> {
-        return githubRepository.getRepositories("abnamrocoesd")
-    }
+    suspend operator fun invoke() =
+        githubRepository.getRepositories("abnamrocoesd")
 }

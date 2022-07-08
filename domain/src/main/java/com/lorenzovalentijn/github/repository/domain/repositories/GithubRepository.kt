@@ -4,6 +4,6 @@ import com.lorenzovalentijn.github.repository.domain.models.RepositoryDetailMode
 import com.lorenzovalentijn.github.repository.domain.models.RepositoryModel
 
 interface GithubRepository {
-    suspend fun getRepositories(user: String): List<RepositoryModel>
-    suspend fun getRepositoryDetails(user: String, repo: String): RepositoryDetailModel?
+    suspend fun getRepositories(user: String): Result<List<RepositoryModel>>
+    suspend fun getRepositoryDetails(user: String, repo: String): Result<RepositoryDetailModel>
 }

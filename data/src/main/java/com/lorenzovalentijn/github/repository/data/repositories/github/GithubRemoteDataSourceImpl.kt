@@ -9,21 +9,25 @@ class GithubRemoteDataSourceImpl(
     private val mapper: GithubRepositoryMapper
 ) : GithubRemoteDataSource {
 
-    override suspend fun getRepositories(user: String): List<RepositoryModel> {
+    override suspend fun getRepositories(user: String): Result<List<RepositoryModel>> {
         val response = GithubService.githubService.getRepositoriesForUser(user)
+
+        if (response.code() == 403) {
+            return Result.failure(Exception("API rate limit exceeded"))
+        }
         response.body()?.let {
-            return mapper.toRepositoryModelList(it)
+            return Result.success(mapper.toRepositoryModelList(it))
         }
 
-        return emptyList()
+        return Result.failure(Exception("An error occurred while retrieving all repositories"))
     }
 
-    override suspend fun getRepositoryDetails(user: String, repo: String): RepositoryDetailModel? {
+    override suspend fun getRepositoryDetails(user: String, repo: String): Result<RepositoryDetailModel> {
         val response = GithubService.githubService.getRepository(user, repo)
         response.body()?.let {
-            return mapper.toRepositoryDetailModel(it)
+            return Result.success(mapper.toRepositoryDetailModel(it))
         }
 
-        return null
+        return Result.failure(Exception("An error occurred retrieving repository details"))
     }
 }

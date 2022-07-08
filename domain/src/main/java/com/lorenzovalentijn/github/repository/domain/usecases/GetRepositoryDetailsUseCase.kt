@@ -7,7 +7,6 @@ import com.lorenzovalentijn.github.repository.domain.repositories.GithubReposito
 class GetRepositoryDetailsUseCase(
     private val githubRepository: GithubRepository
 ) {
-    suspend fun execute(user: String, repo: String): RepositoryDetailModel? {
-        return githubRepository.getRepositoryDetails(user, repo)
-    }
+    suspend operator fun invoke(user: String, repo: String) =
+        githubRepository.getRepositoryDetails(user, repo)
 }

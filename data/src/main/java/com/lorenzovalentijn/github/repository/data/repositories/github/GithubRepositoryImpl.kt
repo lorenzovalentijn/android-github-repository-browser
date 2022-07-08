@@ -9,11 +9,11 @@ class GithubRepositoryImpl(
     private val remote: GithubRemoteDataSource,
 ) : GithubRepository {
 
-    override suspend fun getRepositories(user: String): List<RepositoryModel> {
+    override suspend fun getRepositories(user: String): Result<List<RepositoryModel>> {
         return remote.getRepositories(user)
     }
 
-    override suspend fun getRepositoryDetails(user: String, repo: String): RepositoryDetailModel? {
+    override suspend fun getRepositoryDetails(user: String, repo: String): Result<RepositoryDetailModel> {
         return remote.getRepositoryDetails(user, repo)
     }
 }
