@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.lorenzovalentijn.github.repository.browser">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name="com.lorenzovalentijn.github.repository.browser.MainApp"
         android:allowBackup="true"
