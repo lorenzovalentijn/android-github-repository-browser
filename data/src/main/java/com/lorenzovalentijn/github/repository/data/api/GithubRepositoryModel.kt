@@ -1,8 +1,7 @@
-package com.lorenzovalentijn.github.repository.data.models
+package com.lorenzovalentijn.github.repository.data.api
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.security.acl.Owner
 
 @Serializable
 data class GithubRepositoryModel(

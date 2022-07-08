@@ -1,12 +1,12 @@
 package com.lorenzovalentijn.github.repository.domain.models
 
-class RepositoryDetailModel(
-    name: String,
-    owner: String,
+data class RepositoryDetailModel(
+    val name: String,
+    val owner: String,
     val fullName: String,
     val description: String,
-    ownerAvatarUrl: String,
-    visibility: String,
-    isPrivate: Boolean,
+    val ownerAvatarUrl: String,
+    val visibility: String,
+    val isPrivate: Boolean,
     val htmlUrl: String,
-) : RepositoryModel(name, owner, ownerAvatarUrl, visibility, isPrivate)
+)

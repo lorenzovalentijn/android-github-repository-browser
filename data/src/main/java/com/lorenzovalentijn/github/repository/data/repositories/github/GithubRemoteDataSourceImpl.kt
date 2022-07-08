@@ -1,22 +1,21 @@
 package com.lorenzovalentijn.github.repository.data.repositories.github
 
 import com.lorenzovalentijn.github.repository.data.api.GithubService
-import com.lorenzovalentijn.github.repository.data.mappers.GithubRepositoryMapper
+import com.lorenzovalentijn.github.repository.data.mappers.RepositoryApiMapper
 import com.lorenzovalentijn.github.repository.domain.models.RepositoryDetailModel
-import com.lorenzovalentijn.github.repository.domain.models.RepositoryModel
 
 class GithubRemoteDataSourceImpl(
-    private val mapper: GithubRepositoryMapper
+    private val mapper: RepositoryApiMapper
 ) : GithubRemoteDataSource {
 
-    override suspend fun getRepositories(user: String): Result<List<RepositoryModel>> {
+    override suspend fun getRepositories(user: String): Result<List<RepositoryDetailModel>> {
         val response = GithubService.githubService.getRepositoriesForUser(user)
 
         if (response.code() == 403) {
             return Result.failure(Exception("API rate limit exceeded"))
         }
         response.body()?.let {
-            return Result.success(mapper.toRepositoryModelList(it))
+            return Result.success(mapper.toRepositoryDetailModelList(it))
         }
 
         return Result.failure(Exception("An error occurred while retrieving all repositories"))

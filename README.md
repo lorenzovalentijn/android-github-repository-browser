@@ -57,3 +57,5 @@ Registry: external.system.auto.import.disabled=true
 
 ## Future improvements
 -
+## Questions?
+- Why show public/private repos?

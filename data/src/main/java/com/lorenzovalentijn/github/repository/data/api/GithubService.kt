@@ -3,11 +3,8 @@
 package com.lorenzovalentijn.github.repository.data.api
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.lorenzovalentijn.github.repository.data.models.GithubRepositoryModel
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonBuilder
-import kotlinx.serialization.json.JsonConfiguration
 import okhttp3.MediaType
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -17,10 +14,15 @@ import retrofit2.http.Path
 interface GithubService {
 
     @GET("users/{username}/repos")
-    suspend fun getRepositoriesForUser(@Path("username") user: String): Response<ArrayList<GithubRepositoryModel>>
+    suspend fun getRepositoriesForUser(
+        @Path("username") user: String
+    ): Response<ArrayList<GithubRepositoryModel>>
 
     @GET("repos/{owner}/{repo}")
-    suspend fun getRepository(@Path("owner") user: String, @Path("repo") repo: String): Response<GithubRepositoryModel>
+    suspend fun getRepository(
+        @Path("owner") user: String,
+        @Path("repo") repo: String
+    ): Response<GithubRepositoryModel>
 
     companion object {
         val githubService: GithubService by lazy {

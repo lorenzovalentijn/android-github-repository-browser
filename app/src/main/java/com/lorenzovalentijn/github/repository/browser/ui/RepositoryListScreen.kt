@@ -30,16 +30,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.flowWithLifecycle
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.lorenzovalentijn.github.repository.browser.R
-import com.lorenzovalentijn.github.repository.domain.models.RepositoryModel
+import com.lorenzovalentijn.github.repository.domain.models.RepositoryDetailModel
 import com.lorenzovalentijn.github.repository.presentation.DataState
 import com.lorenzovalentijn.github.repository.presentation.viewmodels.RepositoryListViewModel
 import org.koin.androidx.compose.getViewModel
@@ -65,7 +62,7 @@ fun RepositoryListScreen(
 
 @Composable
 fun RepositoryListScreenContent(
-    state: DataState<List<RepositoryModel>>,
+    state: DataState<List<RepositoryDetailModel>>,
     navigate: (user: String, repo: String) -> Unit = {_, _ -> },
     onRefresh: () -> Unit = {},
 ) {
@@ -101,7 +98,7 @@ fun RepositoryListScreenContent(
 
 @Composable
 fun RepositoryRow(
-    repositoryModel: RepositoryModel,
+    repositoryModel: RepositoryDetailModel,
     navigate: (user: String, repo: String) -> Unit = {_, _ -> },
     ) {
     Row(
@@ -186,16 +183,44 @@ fun RepositoryListScreenContentPreview_Success() {
     RepositoryListScreenContent(
         DataState(
             data = listOf(
-                RepositoryModel(
+                RepositoryDetailModel(
                     "Repo Lorenzo",
                     "lorenzovalentijn",
+                    "lorenzovalentijn/repo",
+                    "Full Repository Description",
                     "https://avatars.githubusercontent.com/u/11546716?v=4",
                     "public",
-                    false
+                    false,
+                    "",
                 ),
-                RepositoryModel("Repo 2", "", "", "public", true),
-                RepositoryModel("Repo 3", "", "", "public", true),
-                RepositoryModel("Repo 4", "", "", "public", true),
+                RepositoryDetailModel(
+                    "Repo 2",
+                    "lorenzovalentijn",
+                    "lorenzovalentijn/repo",
+                    "Full Repository Description",
+                    "",
+                    "public",
+                    true,
+                    "",
+                ),
+                RepositoryDetailModel(
+                    "Repo 3",
+                    "lorenzovalentijn",
+                    "lorenzovalentijn/repo",
+                    "Full Repository Description",
+                    "", "public", true,
+                    "",
+                ),
+                RepositoryDetailModel(
+                    "Repo 4",
+                    "lorenzovalentijn",
+                    "lorenzovalentijn/repo",
+                    "Full Repository Description",
+                    "",
+                    "public",
+                    true,
+                    "",
+                ),
             )
         )
     )

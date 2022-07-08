@@ -2,7 +2,7 @@ package com.lorenzovalentijn.github.repository.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lorenzovalentijn.github.repository.domain.models.RepositoryModel
+import com.lorenzovalentijn.github.repository.domain.models.RepositoryDetailModel
 import com.lorenzovalentijn.github.repository.domain.usecases.GetRepositoryListUseCase
 import com.lorenzovalentijn.github.repository.presentation.DataState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,13 +14,13 @@ class RepositoryListViewModel(
     private val getRepositoryListUseCase: GetRepositoryListUseCase
 ): ViewModel() {
 
-    private val mutableState: MutableStateFlow<DataState<List<RepositoryModel>>> =
+    private val mutableState: MutableStateFlow<DataState<List<RepositoryDetailModel>>> =
         MutableStateFlow(
             DataState(
                 isLoading = true
             )
         )
-    val state: StateFlow<DataState<List<RepositoryModel>>> = mutableState
+    val state: StateFlow<DataState<List<RepositoryDetailModel>>> = mutableState
 
     init {
         refresh()
