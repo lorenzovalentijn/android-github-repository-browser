@@ -3,7 +3,7 @@ package com.lorenzovalentijn.github.repository.presentation.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lorenzovalentijn.github.repository.domain.models.RepositoryDetailModel
-import com.lorenzovalentijn.github.repository.domain.usecases.GetRepositoryListUseCase
+import com.lorenzovalentijn.github.repository.domain.usecases.GetRepositoryOverviewUseCase
 import com.lorenzovalentijn.github.repository.presentation.DataState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class RepositoryListViewModel(
-    private val getRepositoryListUseCase: GetRepositoryListUseCase
+    private val getRepositoryListUseCase: GetRepositoryOverviewUseCase
 ): ViewModel() {
 
     private val mutableState: MutableStateFlow<DataState<List<RepositoryDetailModel>>> =

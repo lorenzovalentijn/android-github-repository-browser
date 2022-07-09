@@ -2,7 +2,6 @@ package com.lorenzovalentijn.github.repository.browser
 
 import android.app.Application
 import android.content.Context
-import com.lorenzovalentijn.github.repository.data.db.RepositoryDao
 import com.lorenzovalentijn.github.repository.data.db.RepositoryDatabase
 import com.lorenzovalentijn.github.repository.data.mappers.RepositoryApiMapper
 import com.lorenzovalentijn.github.repository.data.mappers.RepositoryEntityMapper
@@ -13,7 +12,7 @@ import com.lorenzovalentijn.github.repository.data.repositories.github.GithubRem
 import com.lorenzovalentijn.github.repository.data.repositories.github.GithubRepositoryImpl
 import com.lorenzovalentijn.github.repository.domain.repositories.GithubRepository
 import com.lorenzovalentijn.github.repository.domain.usecases.GetRepositoryDetailsUseCase
-import com.lorenzovalentijn.github.repository.domain.usecases.GetRepositoryListUseCase
+import com.lorenzovalentijn.github.repository.domain.usecases.GetRepositoryOverviewUseCase
 import com.lorenzovalentijn.github.repository.presentation.viewmodels.RepositoryDetailsViewModel
 import com.lorenzovalentijn.github.repository.presentation.viewmodels.RepositoryListViewModel
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +50,7 @@ private val data = module {
 }
 
 private val domain = module {
-    single { GetRepositoryListUseCase(get()) }
+    single { GetRepositoryOverviewUseCase(get()) }
     single { GetRepositoryDetailsUseCase(get()) }
 }
 
