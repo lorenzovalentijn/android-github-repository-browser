@@ -8,8 +8,15 @@ class GithubRemoteDataSourceImpl(
     private val mapper: RepositoryApiMapper
 ) : GithubRemoteDataSource {
 
-    override suspend fun getRepositories(user: String): Result<List<RepositoryDetailModel>> {
-        val response = GithubService.githubService.getRepositoriesForUser(user)
+    override suspend fun getRepositories(
+        user: String,
+        page: Int
+    ): Result<List<RepositoryDetailModel>> {
+        val response = GithubService.githubService.getRepositoriesForUser(
+            user = user,
+            page = page,
+            perPage = 10
+        )
 
         response.body()?.let {
             return Result.success(mapper.toRepositoryDetailModelList(it))
@@ -25,7 +32,10 @@ class GithubRemoteDataSourceImpl(
         return Result.failure(Exception("An error occurred while retrieving all repositories"))
     }
 
-    override suspend fun getRepositoryDetails(user: String, repo: String): Result<RepositoryDetailModel> {
+    override suspend fun getRepositoryDetails(
+        user: String,
+        repo: String
+    ): Result<RepositoryDetailModel> {
         val response = GithubService.githubService.getRepository(user, repo)
         response.body()?.let {
             return Result.success(mapper.toRepositoryDetailModel(it))

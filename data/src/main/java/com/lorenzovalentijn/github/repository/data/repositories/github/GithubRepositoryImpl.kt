@@ -9,7 +9,7 @@ class GithubRepositoryImpl(
 ) : GithubRepository {
 
     override suspend fun getRepositories(user: String): Result<List<RepositoryDetailModel>> {
-        val repositories = remote.getRepositories(user)
+        val repositories = remote.getRepositories(user, 1)
         repositories.onSuccess {
             local.saveAll(it)
         }

@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalSerializationApi::class)
 
 package com.lorenzovalentijn.github.repository.data.api
 
@@ -10,12 +9,15 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface GithubService {
 
     @GET("users/{username}/repos")
     suspend fun getRepositoriesForUser(
-        @Path("username") user: String
+        @Path("username") user: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int,
     ): Response<ArrayList<GithubRepositoryModel>>
 
     @GET("repos/{owner}/{repo}")
@@ -24,6 +26,7 @@ interface GithubService {
         @Path("repo") repo: String
     ): Response<GithubRepositoryModel>
 
+    @OptIn(ExperimentalSerializationApi::class)
     companion object {
         val githubService: GithubService by lazy {
             val json = Json {
