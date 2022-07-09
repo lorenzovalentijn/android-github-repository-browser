@@ -40,7 +40,7 @@ fun NavController() {
                     exitTransition = { exitTransition }
                 ) {
                     RepositoryListScreen { user: String, repo: String ->
-                        navController.navigate("${Screen.RepositoryDetailsScreen.name}/$user/$repo")
+                        navController.navigate("${Screen.RepositoryDetailsScreen.name}/${user}/${repo}")
                     }
                 }
                 composable(
