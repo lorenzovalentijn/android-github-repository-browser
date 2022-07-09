@@ -10,6 +10,8 @@ import com.lorenzovalentijn.github.repository.data.repositories.github.GithubLoc
 import com.lorenzovalentijn.github.repository.data.repositories.github.GithubRemoteDataSource
 import com.lorenzovalentijn.github.repository.data.repositories.github.GithubRemoteDataSourceImpl
 import com.lorenzovalentijn.github.repository.data.repositories.github.GithubRepositoryImpl
+import com.lorenzovalentijn.github.repository.data.repositories.github.RepositoriesPagingSource
+import com.lorenzovalentijn.github.repository.data.repositories.github.RepositoriesRemoteMediator
 import com.lorenzovalentijn.github.repository.domain.AppLogger
 import com.lorenzovalentijn.github.repository.domain.repositories.GithubRepository
 import com.lorenzovalentijn.github.repository.domain.usecases.GetRepositoryDetailsUseCase
@@ -51,6 +53,16 @@ private val data = module {
     }
     single<GithubRemoteDataSource> { GithubRemoteDataSourceImpl(get()) }
     single<GithubRepository> { GithubRepositoryImpl(get(), get()) }
+    single { RepositoriesPagingSource("abnamrocoesd", get()) }
+    single {
+        RepositoriesRemoteMediator(
+            get(),
+            "abnamrocoesd",
+            RepositoryDatabase.getDatabase(get()),
+            get(),
+            get()
+        )
+    }
 }
 
 private val domain = module {
@@ -59,6 +71,6 @@ private val domain = module {
 }
 
 private val presentation = module {
-    viewModel { RepositoryListViewModel(get()) }
+    viewModel { RepositoryListViewModel(get(), get(), get()) }
     viewModel { RepositoryDetailsViewModel(get()) }
 }

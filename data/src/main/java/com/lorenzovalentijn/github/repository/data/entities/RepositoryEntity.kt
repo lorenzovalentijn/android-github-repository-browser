@@ -15,4 +15,5 @@ class RepositoryEntity (
     @ColumnInfo(name = "visibility") val visibility: String?,
     @ColumnInfo(name = "is_private") val isPrivate: Boolean?,
     @ColumnInfo(name = "html_url") val htmlUrl: String?,
+    @ColumnInfo(name = "label") val label: String? = null,
 )

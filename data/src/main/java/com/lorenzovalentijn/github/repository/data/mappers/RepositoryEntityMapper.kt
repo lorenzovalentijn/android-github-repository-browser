@@ -1,5 +1,6 @@
 package com.lorenzovalentijn.github.repository.data.mappers
 
+import com.lorenzovalentijn.github.repository.data.api.GithubRepositoryModel
 import com.lorenzovalentijn.github.repository.data.entities.RepositoryEntity
 import com.lorenzovalentijn.github.repository.domain.models.RepositoryDetailModel
 
@@ -29,7 +30,7 @@ class RepositoryEntityMapper {
         }
     }
 
-    fun toRepositoryEntity(model: RepositoryDetailModel): RepositoryEntity {
+    fun toRepositoryEntity(model: RepositoryDetailModel, label: String? = null): RepositoryEntity {
         return RepositoryEntity(
             name = model.name,
             owner = model.owner,
@@ -39,6 +40,20 @@ class RepositoryEntityMapper {
             visibility = model.visibility,
             isPrivate = model.isPrivate,
             htmlUrl = model.htmlUrl,
+            label = label,
+        )
+    }
+
+    fun toRepositoryEntity(model: GithubRepositoryModel): RepositoryEntity {
+        return RepositoryEntity(
+            name = model.name ?: "",
+            owner = model.owner?.login ?: "",
+            fullName = model.fullName ?: "",
+            description = model.description ?: "",
+            ownerAvatarUrl = model.owner?.avatarUrl ?: "",
+            visibility = model.visibility ?: "",
+            isPrivate = model.isPrivate ?: true,
+            htmlUrl = model.htmlUrl ?: "",
         )
     }
 }
