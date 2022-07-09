@@ -10,6 +10,7 @@ import com.lorenzovalentijn.github.repository.data.repositories.github.GithubLoc
 import com.lorenzovalentijn.github.repository.data.repositories.github.GithubRemoteDataSource
 import com.lorenzovalentijn.github.repository.data.repositories.github.GithubRemoteDataSourceImpl
 import com.lorenzovalentijn.github.repository.data.repositories.github.GithubRepositoryImpl
+import com.lorenzovalentijn.github.repository.domain.AppLogger
 import com.lorenzovalentijn.github.repository.domain.repositories.GithubRepository
 import com.lorenzovalentijn.github.repository.domain.usecases.GetRepositoryDetailsUseCase
 import com.lorenzovalentijn.github.repository.domain.usecases.GetRepositoryOverviewUseCase
@@ -25,7 +26,10 @@ class MainApp : Application() {
         super.onCreate()
         startKoin {
             modules(
-                module { single<Context> { this@MainApp } },
+                module {
+                    single<Context> { this@MainApp }
+                    single<AppLogger> { LoggerImpl() }
+                },
                 data,
                 domain,
                 presentation,
