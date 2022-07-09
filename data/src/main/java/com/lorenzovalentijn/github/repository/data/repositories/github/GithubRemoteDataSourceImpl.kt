@@ -11,11 +11,15 @@ class GithubRemoteDataSourceImpl(
     override suspend fun getRepositories(user: String): Result<List<RepositoryDetailModel>> {
         val response = GithubService.githubService.getRepositoriesForUser(user)
 
-        if (response.code() == 403) {
-            return Result.failure(Exception("API rate limit exceeded"))
-        }
         response.body()?.let {
             return Result.success(mapper.toRepositoryDetailModelList(it))
+        }
+
+        when (response.code()) {
+            401 -> return Result.failure(Exception("Unauthorized."))
+            403 -> return Result.failure(Exception("API rate limit exceeded."))
+            404 -> return Result.failure(Exception("Not found."))
+            405 -> return Result.failure(Exception("Method not allowed"))
         }
 
         return Result.failure(Exception("An error occurred while retrieving all repositories"))
