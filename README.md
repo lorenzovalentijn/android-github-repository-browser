@@ -19,21 +19,22 @@ Registry: external.system.auto.import.disabled=true
 - ***REQ-02:*** The App contains 2 screens; list screen and detail screen.
 - ***REQ-03:*** The list screen shows (paginated) list of repos.
 - ***REQ-04:*** The list screen shows the following data per item:
-- Name
-- Owner’s avatar image
-- Visibility
-- And if the repo is private or public
+  - Name
+  - Owner’s avatar image
+  - Visibility
+  - And if the repo is private or public
 - ***REQ-05:*** Once a user clicks on an item on list screen, it opens the detail screen
 - ***REQ-06:*** Detail screen shows:
-- Name
-- Full name
-- Description
-- Owner’s avatar image
-- Visibility
-- If the repo is private or public
+  - Name
+  - Full name
+  - Description
+  - Owner’s avatar image
+  - Visibility
+  - If the repo is private or public
 - And a CTA button which opens the html_url in an external browser
 - ***REQ-07:*** CTA button which opens the html_url in an external browser
-- ***REQ-08:*** You can use the following GitHub API: https://api.github.com/users/abnamrocoesd/repos?page=1&per_page=10
+- ***REQ-08:*** You can use the following GitHub API:
+https://api.github.com/users/abnamrocoesd/repos?page=1&per_page=10
 - ***REQ-09:*** Make the app to cache the data in the database to be able to working (partly) offline.
 - ***REQ-10:*** The cached data needs to be updated once the connection is available.
 
