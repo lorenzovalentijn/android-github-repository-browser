@@ -159,6 +159,7 @@ fun RepositoryDetailsScreenContentPreview() {
     RepositoryDetailsScreenContent(
         DataState(
             data = RepositoryDetailModel(
+                id = 0,
                 name = "airflow",
                 owner = "abnamrocoesd",
                 fullName = "abnamrocoesd/airflow",

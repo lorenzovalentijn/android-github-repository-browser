@@ -13,6 +13,7 @@ class RepositoryEntityMapper {
 
     fun toRepositoryDetailModel(model: RepositoryEntity): RepositoryDetailModel {
         return RepositoryDetailModel(
+            id = model.id,
             name = model.name ?: "",
             owner = model.owner ?: "",
             fullName = model.fullName ?: "",
@@ -30,8 +31,9 @@ class RepositoryEntityMapper {
         }
     }
 
-    fun toRepositoryEntity(model: RepositoryDetailModel, label: String? = null): RepositoryEntity {
+    fun toRepositoryEntity(model: RepositoryDetailModel): RepositoryEntity {
         return RepositoryEntity(
+            id = model.id,
             name = model.name,
             owner = model.owner,
             fullName = model.fullName,
@@ -40,12 +42,12 @@ class RepositoryEntityMapper {
             visibility = model.visibility,
             isPrivate = model.isPrivate,
             htmlUrl = model.htmlUrl,
-            label = label,
         )
     }
 
     fun toRepositoryEntity(model: GithubRepositoryModel): RepositoryEntity {
         return RepositoryEntity(
+            id = model.id ?: 0,
             name = model.name ?: "",
             owner = model.owner?.login ?: "",
             fullName = model.fullName ?: "",

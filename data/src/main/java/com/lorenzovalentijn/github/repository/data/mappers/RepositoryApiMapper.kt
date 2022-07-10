@@ -12,6 +12,7 @@ class RepositoryApiMapper {
 
     fun toRepositoryDetailModel(model: GithubRepositoryModel): RepositoryDetailModel {
         return RepositoryDetailModel(
+            id = model.id ?: 0,
             name = model.name ?: "",
             owner = model.owner?.login ?: "",
             fullName = model.fullName ?: "",

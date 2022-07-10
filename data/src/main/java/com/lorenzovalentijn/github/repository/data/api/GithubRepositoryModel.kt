@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GithubRepositoryModel(
-    val id: Int? = null,
+    val id: Long? = null,
     @SerialName("node_id")
     val nodeId: String? = null,
     val name: String? = null,

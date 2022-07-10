@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "repositories")
 class RepositoryEntity (
-    @PrimaryKey
+    @PrimaryKey @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "full_name") val fullName: String,
     @ColumnInfo(name = "name") val name: String?,
     @ColumnInfo(name = "owner") val owner: String?,
@@ -15,5 +15,4 @@ class RepositoryEntity (
     @ColumnInfo(name = "visibility") val visibility: String?,
     @ColumnInfo(name = "is_private") val isPrivate: Boolean?,
     @ColumnInfo(name = "html_url") val htmlUrl: String?,
-    @ColumnInfo(name = "label") val label: String? = null,
 )
