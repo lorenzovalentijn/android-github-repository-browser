@@ -26,7 +26,7 @@ class GithubLocalDataSourceImpl(
 
     override suspend fun saveAll(repositories: List<RepositoryDetailModel>) {
         withContext(coroutineDispatcher) {
-            repositoryDao.insertAll(*repositoryEntityMapper.toRepositoryEntityList(repositories).toTypedArray())
+            repositoryDao.insertAll(repositoryEntityMapper.toRepositoryEntityList(repositories))
         }
     }
 }

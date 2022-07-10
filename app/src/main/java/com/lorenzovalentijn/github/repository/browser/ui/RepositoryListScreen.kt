@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.flowWithLifecycle
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -41,6 +42,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.lorenzovalentijn.github.repository.domain.models.RepositoryDetailModel
 import com.lorenzovalentijn.github.repository.presentation.DataState
 import com.lorenzovalentijn.github.repository.presentation.viewmodels.RepositoryListViewModel
+import kotlinx.coroutines.flow.flowOf
 import org.koin.androidx.compose.getViewModel
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -54,13 +56,13 @@ fun RepositoryListScreen(
         viewModel.state.flowWithLifecycle(lifecycleOwner.lifecycle)
     }
     val state by lifeCycleAwareStateFlow.collectAsState(initial = viewModel.state.value)
-    val lazyPagingItems = viewModel.mediatorFlow.collectAsLazyPagingItems()
+    val lazyPagingItems = viewModel.pagingResult.collectAsLazyPagingItems()
 
     RepositoryListScreenContent(
         state = state,
         navigate = navigate,
-        onRefresh = { viewModel.refresh() },
-        lazy = lazyPagingItems,
+        onRefresh = { viewModel.loadData() },
+        lazyPagingItems = lazyPagingItems,
     )
 }
 
@@ -69,7 +71,7 @@ fun RepositoryListScreenContent(
     state: DataState<List<RepositoryDetailModel>>,
     navigate: (user: String, repo: String) -> Unit = { _, _ -> },
     onRefresh: () -> Unit = {},
-    lazy: LazyPagingItems<RepositoryDetailModel>,
+    lazyPagingItems: LazyPagingItems<RepositoryDetailModel>? = null,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Repository List") }) }
@@ -85,10 +87,9 @@ fun RepositoryListScreenContent(
                 state.error?.let {
                     ErrorText(it)
                 }
-                state.data?.let { data ->
-                    // state.data?.let { data ->
+                lazyPagingItems?.let { items ->
                     LazyColumn {
-                        items(lazy) { repositoryModel ->
+                        items(items) { repositoryModel ->
                             if (repositoryModel != null) {
                                 RepositoryRow(
                                     repositoryModel = repositoryModel,
@@ -167,73 +168,78 @@ fun ErrorText(error: String) {
     }
 }
 
-// @Preview
-// @Composable
-// fun RepositoryListScreenContentPreview_Loading() {
-//     RepositoryListScreenContent(DataState(isLoading = true), lazy = lazyPagingItems)
-// }
-//
-// @Preview
-// @Composable
-// fun RepositoryListScreenContentPreview_Empty() {
-//     RepositoryListScreenContent(DataState(isEmpty = true), lazy = lazyPagingItems)
-// }
-//
-// @Preview
-// @Composable
-// fun RepositoryListScreenContentPreview_Error() {
-//     RepositoryListScreenContent(
-//         DataState(error = "Data couldn't be loaded."),
-//         lazy = lazyPagingItems
-//     )
-// }
-//
-// @Preview
-// @Composable
-// fun RepositoryListScreenContentPreview_Success() {
-//     RepositoryListScreenContent(
-//         DataState(
-//             data = listOf(
-//                 RepositoryDetailModel(
-//                     "Repo Lorenzo",
-//                     "lorenzovalentijn",
-//                     "lorenzovalentijn/repo",
-//                     "Full Repository Description",
-//                     "https://avatars.githubusercontent.com/u/11546716?v=4",
-//                     "public",
-//                     false,
-//                     "",
-//                 ),
-//                 RepositoryDetailModel(
-//                     "Repo 2",
-//                     "lorenzovalentijn",
-//                     "lorenzovalentijn/repo",
-//                     "Full Repository Description",
-//                     "",
-//                     "public",
-//                     true,
-//                     "",
-//                 ),
-//                 RepositoryDetailModel(
-//                     "Repo 3",
-//                     "lorenzovalentijn",
-//                     "lorenzovalentijn/repo",
-//                     "Full Repository Description",
-//                     "", "public", true,
-//                     "",
-//                 ),
-//                 RepositoryDetailModel(
-//                     "Repo 4",
-//                     "lorenzovalentijn",
-//                     "lorenzovalentijn/repo",
-//                     "Full Repository Description",
-//                     "",
-//                     "public",
-//                     true,
-//                     "",
-//                 ),
-//             )
-//         ),
-//         lazy = lazyPagingItems
-//     )
-// }
+@Preview
+@Composable
+fun RepositoryListScreenContentPreview_Loading() {
+    RepositoryListScreenContent(DataState(isLoading = true), lazyPagingItems = null)
+}
+
+@Preview
+@Composable
+fun RepositoryListScreenContentPreview_Empty() {
+    RepositoryListScreenContent(DataState(isEmpty = true), lazyPagingItems = null)
+}
+
+@Preview
+@Composable
+fun RepositoryListScreenContentPreview_Error() {
+    RepositoryListScreenContent(
+        DataState(error = "Data couldn't be loaded."),
+        lazyPagingItems = null
+    )
+}
+
+@Preview
+@Composable
+fun RepositoryListScreenContentPreview_Success() {
+
+    val previewList = listOf(
+        RepositoryDetailModel(
+            1,
+            "Repo Lorenzo",
+            "lorenzovalentijn",
+            "lorenzovalentijn/repo",
+            "Full Repository Description",
+            "https://avatars.githubusercontent.com/u/11546716?v=4",
+            "public",
+            false,
+            "",
+        ),
+        RepositoryDetailModel(
+            2,
+            "Repo 2",
+            "lorenzovalentijn",
+            "lorenzovalentijn/repo",
+            "Full Repository Description",
+            "",
+            "public",
+            true,
+            "",
+        ),
+        RepositoryDetailModel(
+            3,
+            "Repo 3",
+            "lorenzovalentijn",
+            "lorenzovalentijn/repo",
+            "Full Repository Description",
+            "", "public", true,
+            "",
+        ),
+        RepositoryDetailModel(
+            4,
+            "Repo 4",
+            "lorenzovalentijn",
+            "lorenzovalentijn/repo",
+            "Full Repository Description",
+            "",
+            "public",
+            true,
+            "",
+        ),
+    )
+
+    RepositoryListScreenContent(
+        DataState(isLoading = false),
+        lazyPagingItems = flowOf(PagingData.from(previewList)).collectAsLazyPagingItems()
+    )
+}
