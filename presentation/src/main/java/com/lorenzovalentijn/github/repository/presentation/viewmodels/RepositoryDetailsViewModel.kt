@@ -22,7 +22,7 @@ class RepositoryDetailsViewModel(
         )
     val state: StateFlow<DataState<RepositoryDetailModel>> = mutableState
 
-    fun refresh(user: String?, repo: String?) {
+    fun loadData(user: String?, repo: String?) {
         mutableState.update { it.copy(isLoading = true) }
 
         if (user == null || repo == null) {
@@ -36,7 +36,7 @@ class RepositoryDetailsViewModel(
         }
 
         viewModelScope.launch {
-            val result = getRepositoryDetailsUseCase(user, repo)
+            val result = getRepositoryDetailsUseCase(Pair(user, repo))
             result.onSuccess { model ->
                 mutableState.update {
                     it.copy(

@@ -43,7 +43,6 @@ class MainApp : Application() {
 private val data = module {
     single { RepositoryApiMapper() }
     single { RepositoryEntityMapper() }
-    // single<RepositoryDatabase> { RepositoryDatabase.getDatabase(get()) }
     single<GithubLocalDataSource> {
         GithubLocalDataSourceImpl(
             RepositoryDatabase.getDatabase(get()),
@@ -52,25 +51,45 @@ private val data = module {
         )
     }
     single<GithubRemoteDataSource> { GithubRemoteDataSourceImpl(get()) }
-    single<GithubRepository> { GithubRepositoryImpl(get(), get()) }
-    single { RepositoriesPagingSource("abnamrocoesd", get()) }
+    single<GithubRepository> {
+        GithubRepositoryImpl(
+            get(),
+            get(),
+            get(),
+            RepositoryDatabase.getDatabase(get()),
+            get(),
+            get(),
+            get(),
+        )
+    }
+    single {
+        RepositoriesPagingSource(
+            USER,
+            RepositoryDatabase.getDatabase(get()),
+            get(),
+            get(),
+            get(),
+        )
+    }
     single {
         RepositoriesRemoteMediator(
             get(),
-            "abnamrocoesd",
+            USER,
             RepositoryDatabase.getDatabase(get()),
             get(),
-            get()
+            get(),
         )
     }
 }
 
 private val domain = module {
-    single { GetRepositoryOverviewUseCase(get()) }
-    single { GetRepositoryDetailsUseCase(get()) }
+    single { GetRepositoryOverviewUseCase(get(), get(), Dispatchers.Main) }
+    single { GetRepositoryDetailsUseCase(get(), get(), Dispatchers.Main) }
 }
 
 private val presentation = module {
-    viewModel { RepositoryListViewModel(get(), get(), get()) }
+    viewModel { RepositoryListViewModel(get(), get()) }
     viewModel { RepositoryDetailsViewModel(get()) }
 }
+
+private const val USER = "abnamrocoesd"
