@@ -4,7 +4,6 @@ package com.lorenzovalentijn.github.repository.data.api
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -14,8 +13,13 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+const val START_PAGE = 1
+const val PAGE_SIZE = 50
+
 interface GithubService {
 
+    // Enable for authorization with token.
+    // @Headers("Authorization: token <TOKEN>")
     @GET("users/{username}/repos")
     suspend fun getRepositoriesForUser(
         @Path("username") user: String,
@@ -23,6 +27,8 @@ interface GithubService {
         @Query("per_page") perPage: Int,
     ): Response<ArrayList<GithubRepositoryModel>>
 
+    // Enable for authorization with token.
+    // @Headers("Authorization: token <TOKEN>")
     @GET("repos/{owner}/{repo}")
     suspend fun getRepository(
         @Path("owner") user: String,

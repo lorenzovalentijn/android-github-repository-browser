@@ -10,12 +10,13 @@ class GithubRemoteDataSourceImpl(
 
     override suspend fun getRepositories(
         user: String,
-        page: Int
+        page: Int,
+        perPage: Int,
     ): Result<List<RepositoryDetailModel>> {
         val response = GithubService.githubService.getRepositoriesForUser(
             user = user,
             page = page,
-            perPage = 10
+            perPage = perPage
         )
 
         response.body()?.let {
