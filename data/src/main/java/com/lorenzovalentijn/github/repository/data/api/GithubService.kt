@@ -5,6 +5,9 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.http.GET
@@ -33,9 +36,15 @@ interface GithubService {
                 ignoreUnknownKeys = true
                 isLenient = true
             }
-            val contentType = MediaType.get("application/json")
+            val logger = HttpLoggingInterceptor()
+            logger.level = HttpLoggingInterceptor.Level.BASIC
+
+            val client = OkHttpClient.Builder().addInterceptor(logger).build()
+
+            val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()
                 .baseUrl("https://api.github.com/")
+                .client(client)
                 .addConverterFactory(json.asConverterFactory(contentType))
                 .build()
 
