@@ -33,14 +33,15 @@ fun NavController() {
         Scaffold {
             AnimatedNavHost(
                 navController = navController,
-                startDestination = Screen.RepositoryListScreen.name) {
+                startDestination = Screen.RepositoryListScreen.name
+            ) {
                 composable(
                     route = Screen.RepositoryListScreen.name,
                     enterTransition = { slideInHorizontally() },
                     exitTransition = { exitTransition }
                 ) {
                     RepositoryListScreen { user: String, repo: String ->
-                        navController.navigate("${Screen.RepositoryDetailsScreen.name}/${user}/${repo}")
+                        navController.navigate("${Screen.RepositoryDetailsScreen.name}/$user/$repo")
                     }
                 }
                 composable(

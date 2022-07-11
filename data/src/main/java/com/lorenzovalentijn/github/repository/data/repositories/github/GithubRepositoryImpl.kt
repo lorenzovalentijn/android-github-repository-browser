@@ -23,7 +23,7 @@ class GithubRepositoryImpl(
     private val repositoriesPagingSource: RepositoriesPagingSource,
     private val repositoriesRemoteMediator: RepositoriesRemoteMediator,
     private val repositoryEntityMapper: RepositoryEntityMapper,
-    ) : GithubRepository {
+) : GithubRepository {
 
     override suspend fun getRepositories(user: String, page: Int, perPage: Int): Result<List<RepositoryDetailModel>> {
         val repositories = remote.getRepositories(user, page, perPage)

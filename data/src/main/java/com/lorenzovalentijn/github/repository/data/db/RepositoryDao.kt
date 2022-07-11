@@ -33,7 +33,6 @@ interface RepositoryDao {
     @Query("SELECT * FROM repositories")
     fun allRepos(): PagingSource<Int, RepositoryEntity>
 
-
     @Query("DELETE FROM repositories")
     suspend fun clearAll()
 }

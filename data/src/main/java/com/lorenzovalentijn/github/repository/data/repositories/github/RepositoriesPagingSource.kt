@@ -19,7 +19,7 @@ class RepositoriesPagingSource(
     private val githubRemoteDataSource: GithubRemoteDataSource,
     private val repositoryEntityMapper: RepositoryEntityMapper,
     private val logger: AppLogger,
-    ) : PagingSource<Int, RepositoryDetailModel>() {
+) : PagingSource<Int, RepositoryDetailModel>() {
 
     override fun getRefreshKey(state: PagingState<Int, RepositoryDetailModel>): Int? {
         return state.anchorPosition?.let { anchorPosition ->

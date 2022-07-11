@@ -54,7 +54,7 @@ fun RepositoryDetailsScreen(
     repo: String?,
     viewModel: RepositoryDetailsViewModel = getViewModel(),
     popBack: () -> Unit = {},
-    ) {
+) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifeCycleAwareStateFlow = remember(viewModel.state, lifecycleOwner) {
         viewModel.state.flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -86,9 +86,11 @@ fun RepositoryDetailsScreenContent(
             })
         }
     ) {
-        Surface(modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp)) {
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp)
+        ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 if (state.isLoading) {
                     Box(modifier = Modifier.fillMaxSize()) {

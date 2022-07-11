@@ -2,14 +2,12 @@ package com.lorenzovalentijn.github.repository.data.repositories.github
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
-import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.lorenzovalentijn.github.repository.data.api.START_PAGE
 import com.lorenzovalentijn.github.repository.data.db.RepositoryDatabase
 import com.lorenzovalentijn.github.repository.data.entities.RemoteKeysEntity
-import com.lorenzovalentijn.github.repository.data.entities.RepositoryEntity
 import com.lorenzovalentijn.github.repository.data.mappers.RepositoryEntityMapper
 import com.lorenzovalentijn.github.repository.domain.AppLogger
 import com.lorenzovalentijn.github.repository.domain.models.RepositoryDetailModel

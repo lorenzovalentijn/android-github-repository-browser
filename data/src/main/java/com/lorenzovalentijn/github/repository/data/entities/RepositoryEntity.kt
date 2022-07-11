@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "repositories")
-data class RepositoryEntity (
+data class RepositoryEntity(
     @PrimaryKey @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "full_name") val fullName: String,
     @ColumnInfo(name = "name") val name: String?,

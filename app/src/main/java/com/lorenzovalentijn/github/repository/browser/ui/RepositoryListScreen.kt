@@ -49,7 +49,7 @@ import org.koin.androidx.compose.getViewModel
 @Composable
 fun RepositoryListScreen(
     viewModel: RepositoryListViewModel = getViewModel(),
-    navigate: (user: String, repo: String) -> Unit = {_, _ -> },
+    navigate: (user: String, repo: String) -> Unit = { _, _ -> },
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifeCycleAwareStateFlow = remember(viewModel.state, lifecycleOwner) {
@@ -108,8 +108,8 @@ fun RepositoryListScreenContent(
 @Composable
 fun RepositoryRow(
     repositoryModel: RepositoryDetailModel,
-    navigate: (user: String, repo: String) -> Unit = {_, _ -> },
-    ) {
+    navigate: (user: String, repo: String) -> Unit = { _, _ -> },
+) {
     Row(
         Modifier
             .fillMaxSize()

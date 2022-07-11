@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class RepositoryListViewModel(
     private val logger: AppLogger,
     private val getRepositoryListUseCase: GetRepositoryOverviewUseCase,
-): ViewModel() {
+) : ViewModel() {
 
     private val mutableState: MutableStateFlow<DataState<List<RepositoryDetailModel>>> =
         MutableStateFlow(
