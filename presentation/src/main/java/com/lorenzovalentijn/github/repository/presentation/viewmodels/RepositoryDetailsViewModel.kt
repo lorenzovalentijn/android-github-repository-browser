@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.lorenzovalentijn.github.repository.domain.models.RepositoryDetailModel
 import com.lorenzovalentijn.github.repository.domain.usecases.GetRepositoryDetailsUseCase
 import com.lorenzovalentijn.github.repository.presentation.DataState
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -22,20 +23,20 @@ class RepositoryDetailsViewModel(
         )
     val state: StateFlow<DataState<RepositoryDetailModel>> = mutableState
 
-    fun loadData(user: String?, repo: String?) {
+    fun loadData(user: String?, repo: String?): Job {
         mutableState.update { it.copy(isLoading = true) }
 
-        if (user == null || repo == null) {
-            mutableState.update {
-                it.copy(
-                    isLoading = false,
-                    error = "User Name or Repository Name is missing."
-                )
+        return viewModelScope.launch {
+            if (user == null || repo == null) {
+                mutableState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "User Name or Repository Name is missing."
+                    )
+                }
+                return@launch
             }
-            return
-        }
 
-        viewModelScope.launch {
             val result = getRepositoryDetailsUseCase(Pair(user, repo))
             result.onSuccess { model ->
                 mutableState.update {

@@ -8,6 +8,7 @@ import com.lorenzovalentijn.github.repository.domain.AppLogger
 import com.lorenzovalentijn.github.repository.domain.models.RepositoryDetailModel
 import com.lorenzovalentijn.github.repository.domain.usecases.GetRepositoryOverviewUseCase
 import com.lorenzovalentijn.github.repository.presentation.DataState
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,10 +35,10 @@ class RepositoryListViewModel(
         loadData()
     }
 
-    fun loadData() {
+    fun loadData(): Job {
         mutableState.update { it.copy(isLoading = true) }
 
-        viewModelScope.launch {
+        return viewModelScope.launch {
             try {
                 pagingResult = getRepositoryListUseCase(Any())
                     .getOrThrow()
@@ -47,6 +48,7 @@ class RepositoryListViewModel(
                 mutableState.update { it.copy(isLoading = false) }
             } catch (e: Exception) {
                 logger.e("Error in paging result.", e)
+                mutableState.update { dataState -> dataState.copy(error = e.message) }
             }
         }
     }
